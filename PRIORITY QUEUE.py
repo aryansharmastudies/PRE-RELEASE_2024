@@ -128,6 +128,11 @@ def FindFreeTill(Tills, NoOfTills):
     else:
         return -1
 
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 def ServeBuyer(BuyerQ, QLength):
     ThisBuyerID = BuyerQ[0].BuyerID
@@ -144,6 +149,11 @@ def ServeBuyer(BuyerQ, QLength):
     print(f"{ThisBuyerID:>17s}", end='')
     return BuyerQ, QLength, ThisBuyerID, ThisBuyerWaitingTime, ThisBuyerItems
 
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 def UpdateStats(Stats, WaitingTime):
     Stats[TOTAL_WAIT] += WaitingTime
