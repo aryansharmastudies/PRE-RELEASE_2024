@@ -64,14 +64,14 @@ def ChangeSettings():
             except:
                 print("Enter Valid Integer between 0 and 50")
         print(f"Maximum number of tills is {MAX_TILLS}")
-        NoOfTills = int(input("Number of tills in use: "))
-        valid = False
-        while not valid:
+        valid_tills = False
+        while not valid_tills:
             try:
                 NoOfTills = int(input("Number of tills in use: "))
                 while NoOfTills > MAX_TILLS or NoOfTills < 1:
                     print(f"Maximum number of tills is {MAX_TILLS}")
                     NoOfTills = int(input("Number of tills in use: "))
+                valid_tills = True
             except:
                 print("Enter valid Integer.")
     return SimulationTime, NoOfTills
