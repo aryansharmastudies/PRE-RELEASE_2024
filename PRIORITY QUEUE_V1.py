@@ -103,6 +103,11 @@ def OutputHeading():
     print("     (items)| buyer            | ber            ving | ID    time in")
     print("            |                  |                     |            basket")
 
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 def BuyerJoinsQ(Data, BuyerQ, QLength, BuyerNumber, Optimization):
     ItemsInBasket = Data[BuyerNumber][ITEMS]
@@ -119,7 +124,11 @@ def BuyerJoinsQ(Data, BuyerQ, QLength, BuyerNumber, Optimization):
         BuyerQ[QLength].ItemsInBasket = ItemsInBasket
     QLength += 1
     return BuyerQ, QLength
-
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 def BuyerArrives(Data, BuyerQ, QLength, BuyerNumber, NoOfTills, Stats, Optimization):
     print(f"  B{BuyerNumber}({Data[BuyerNumber][ITEMS]})")
