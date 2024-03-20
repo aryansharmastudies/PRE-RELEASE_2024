@@ -40,6 +40,11 @@ def ResetDataStructures():
     BuyerQ = [Q_Node() for i in range(MAX_Q_SIZE)]
     return Stats, Tills, BuyerQ
 
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 def ChangeSettings():
     SimulationTime = 10
@@ -69,6 +74,12 @@ def ChangeSettings():
         print(f"Input 'ON' to turn Optimization ON. Otherwise, Input 'OFF' to keep it OFF.")
         Optimization = input("Input: ")
     return SimulationTime, NoOfTills, Optimization
+
+    ###################
+    ###################
+    ### U P D A T E ###
+    ###################
+    ###################
 
 
 def ReadInSimulationData():
