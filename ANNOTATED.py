@@ -88,7 +88,7 @@ def BuyerJoinsQ(Data, BuyerQ, QLength, BuyerNumber):
   QLength += 1
   return BuyerQ, QLength
 
-def BuyerArrives(Data, BuyerQ, QLength, BuyerNumber, NoOfTills, Stats):
+def BuyerArrives(Data, BuyerQ, QLength, BuyerNumber, NoOfTills, Stats):  # SUS - NoOfTills is never used (Krishiv👀)
   print(f"  B{BuyerNumber}({Data[BuyerNumber][ITEMS]})")
   BuyerQ, QLength = BuyerJoinsQ(Data, BuyerQ, QLength, BuyerNumber)
   return BuyerQ, QLength, NoOfTills, Stats
