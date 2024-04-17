@@ -26,6 +26,7 @@ TOTAL_Q = 3
 TOTAL_Q_OCCURRENCE = 4
 TOTAL_NO_WAIT = 5
 PROFIT = 6
+WORKNIG_TIME = 7
 
 # costs
 ITEM_COST = 1
@@ -157,14 +158,16 @@ def IncrementTimeWaiting(BuyerQ, QLength):
     return BuyerQ
 
 
-def UpdateTills(Tills, NoOfTills):
+def UpdateTills(Tills, NoOfTills, Working_Time):
     for TillNumber in range(NoOfTills + 1):
         if Tills[TillNumber][TIME_SERVING] == 0:
             Tills[TillNumber][TIME_IDLE] += 1
         else:
             Tills[TillNumber][TIME_BUSY] += 1
             Tills[TillNumber][TIME_SERVING] -= 1
-    return Tills
+            Working_Time += 1
+
+    return Tills, Working_Time
 
 
 def OutputTillAndQueueStates(Tills, NoOfTills, BuyerQ, QLength):
@@ -177,7 +180,7 @@ def OutputTillAndQueueStates(Tills, NoOfTills, BuyerQ, QLength):
     print("------------------------------------------------------------------------")
 
 
-def Serving(Tills, NoOfTills, BuyerQ, QLength, Stats):
+def Serving(Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time):
     TillFree = FindFreeTill(Tills, NoOfTills)
     while TillFree != -1 and QLength > 0:  # while there is a free till and queue is available
         BuyerQ, QLength, BuyerID, WaitingTime, ItemsInBasket = ServeBuyer(BuyerQ, QLength)
@@ -185,14 +188,14 @@ def Serving(Tills, NoOfTills, BuyerQ, QLength, Stats):
         Tills = CalculateServingTime(Tills, TillFree, ItemsInBasket)
         TillFree = FindFreeTill(Tills, NoOfTills)
     BuyerQ = IncrementTimeWaiting(BuyerQ, QLength)
-    Tills = UpdateTills(Tills, NoOfTills)
+    Tills, Working_Time = UpdateTills(Tills, NoOfTills, Working_Time)
     if QLength > 0:
         Stats[TOTAL_Q_OCCURRENCE] += 1
         Stats[TOTAL_Q] += QLength
     if QLength > Stats[MAX_Q_LENGTH]:
         Stats[MAX_Q_LENGTH] = QLength
     OutputTillAndQueueStates(Tills, NoOfTills, BuyerQ, QLength)
-    return Tills, NoOfTills, BuyerQ, QLength, Stats
+    return Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time
 
 
 def TillsBusy(Tills, NoOfTills):
@@ -208,7 +211,10 @@ def TillsBusy(Tills, NoOfTills):
 def OutputStats(Stats, BuyerNumber, SimulationTime):
     print("The simulation statistics are:")
     print("==============================")
-    print(f"😊 The profit: {Stats[PROFIT]}")
+    print(f"😊 The sale: {Stats[PROFIT]}")
+    print(f"😊 The time working: {Stats[WORKNIG_TIME]}")
+    #
+    print(f"😊 The PROFIT: {Stats[PROFIT] - (0.2 * Stats[WORKNIG_TIME])}")
     print(f"The maximum queue length was: {Stats[MAX_Q_LENGTH]} buyers")
     print(f"The maximum waiting time was: {Stats[MAX_WAIT]} time units")
     print(f"{BuyerNumber} buyers arrived during {SimulationTime} time units")
@@ -224,6 +230,7 @@ def QueueSimulator():
     BuyerNumber = 0
     QLength = 0
     Sale = 0
+    Working_Time = 0
     Stats, Tills, BuyerQ = ResetDataStructures()
     SimulationTime, NoOfTills = ChangeSettings()
     Data = ReadInSimulationData()
@@ -238,18 +245,19 @@ def QueueSimulator():
             TimeToNextArrival = Data[BuyerNumber + 1][ARRIVAL_TIME]
         else:
             print()
-        Tills, NoOfTills, BuyerQ, QLength, Stats = Serving(Tills, NoOfTills, BuyerQ, QLength, Stats)
-        Stats[PROFIT] = Sale
+        Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time = Serving(Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time)
+    Stats[PROFIT] = Sale
+    Stats[WORKNIG_TIME] = Working_Time
     ExtraTime = 0
     while QLength > 0:
         TimeUnit = SimulationTime + ExtraTime
         print(f"{TimeUnit:>3d}")
-        Tills, NoOfTills, BuyerQ, QLength, Stats = Serving(Tills, NoOfTills, BuyerQ, QLength, Stats)
+        Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time = Serving(Tills, NoOfTills, BuyerQ, QLength, Stats, Working_Time)
         ExtraTime += 1
     while TillsBusy(Tills, NoOfTills):
         TimeUnit = SimulationTime + ExtraTime
         print(f"{TimeUnit:>3d}")
-        Tills = UpdateTills(Tills, NoOfTills)
+        Tills, Working_Time = UpdateTills(Tills, NoOfTills, Working_Time)
         OutputTillAndQueueStates(Tills, NoOfTills, BuyerQ, QLength)
         ExtraTime += 1
     OutputStats(Stats, BuyerNumber, SimulationTime)
